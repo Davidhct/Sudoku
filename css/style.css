@@ -1,0 +1,93 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+main {
+    display: flex;
+    align-items: flex-end;
+    width: 70vw;
+    border: blue solid;
+    justify-content: space-around;
+}
+
+table {
+  border: 2px solid black; 
+  border-collapse: collapse;
+}
+
+td {
+  width: 50px;
+  height: 50px;
+  border: 1px solid black;
+  text-align: center;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+}
+td:hover {
+  background: rgb(236, 233, 233);
+}
+
+td:nth-child(3n){
+  border-right: 2px solid black;
+}
+
+
+tr:nth-child(3n) td {
+  border-bottom: 2px solid black;
+}
+
+.help-btn {
+  display: flex;
+  height: 44px;
+  border: solid blue;
+  align-items: center;
+  justify-content: space-evenly;
+ 
+}
+
+.help-btn > button {
+  padding: 11px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  font-size: 17px;
+  background: rgb(78 111 232);
+}
+.help-btn > button:hover {
+  background: rgb(82 143 206);
+}
+
+.number-btn {
+    display: flex;
+    width: 242px;
+    height: 228px;
+    border: solid blue;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.number {
+  font-size: 30px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+}
+.number:hover {
+ background: rgb(201, 198, 198);
+}
