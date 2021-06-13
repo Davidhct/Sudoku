@@ -13,15 +13,15 @@ body {
 }
 
 main {
-    display: flex;
-    align-items: flex-end;
-    width: 70vw;
-    border: blue solid;
-    justify-content: space-around;
+  display: flex;
+  align-items: flex-end;
+  width: 70vw;
+  border: blue solid;
+  justify-content: space-around;
 }
 
 table {
-  border: 2px solid black; 
+  border: 2px solid black;
   border-collapse: collapse;
 }
 
@@ -38,10 +38,9 @@ td:hover {
   background: rgb(236, 233, 233);
 }
 
-td:nth-child(3n){
+td:nth-child(3n) {
   border-right: 2px solid black;
 }
-
 
 tr:nth-child(3n) td {
   border-bottom: 2px solid black;
@@ -53,7 +52,6 @@ tr:nth-child(3n) td {
   border: solid blue;
   align-items: center;
   justify-content: space-evenly;
- 
 }
 
 .help-btn > button {
@@ -70,13 +68,13 @@ tr:nth-child(3n) td {
 }
 
 .number-btn {
-    display: flex;
-    width: 242px;
-    height: 228px;
-    border: solid blue;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-evenly;
+  display: flex;
+  width: 242px;
+  height: 228px;
+  border: solid blue;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .number {
@@ -89,5 +87,5 @@ tr:nth-child(3n) td {
   cursor: pointer;
 }
 .number:hover {
- background: rgb(201, 198, 198);
+  background: rgb(201, 198, 198);
 }
