@@ -162,20 +162,23 @@ tr:nth-child(3n) td {
     align-items: center;
   }
   table {
-    width: 270px;
+    width: 400px;
   }
 
   td {
-    width: 30px;
-    height: 30px;
+    width: 44.444px;
+    height: 44.444px;
     font-size: 20px;
   }
   .side-tools {
-    width: 270px;
+    display: flex;
+    align-items: center;
+    width: 400px;
     height: 68px;
+    border: solid;
   }
   .side-tools > div {
-    width: 269px;
+    width: 399px;
     height: 38px;
   }
   .help-btn {
@@ -185,22 +188,25 @@ tr:nth-child(3n) td {
 
   .help-btn > button {
     padding: 5px;
-    font-size: 10px;
+    font-size: 17px;
   }
 
   .tools-btn > button > img {
-    width: 15px;
-    height: 15px;
+    width: 24px;
+    height: 24px;
   }
 
   .number-btn {
-    width: 269px;
+    width: 399px;
     height: 28px;
   }
 
   .number {
-    font-size: 10px;
-    width: 15px;
-    height: 15px;
+    font-size: 17px;
+    width: 28px;
+    height: 28px;
   }
+}
+
+@media only screen and (max-width: 399px) {
 }
