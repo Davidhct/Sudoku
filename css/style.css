@@ -11,6 +11,7 @@ body {
   height: 100vh;
   width: 100vw;
   font-family: "Hind", sans-serif;
+  background-attachment: fixed;
 }
 
 main {
@@ -22,6 +23,7 @@ main {
 table {
   border: 2px solid black;
   border-collapse: collapse;
+  width: 450px;
 }
 
 td {
@@ -51,6 +53,12 @@ tr:nth-child(3n) td {
   flex-direction: column;
   height: 452px;
   /* border: 3px solid green; */
+  justify-content: space-evenly;
+}
+.side-tools > div {
+  display: flex;
+  height: 173px;
+  flex-direction: column;
   justify-content: space-evenly;
 }
 
@@ -112,18 +120,87 @@ tr:nth-child(3n) td {
   background: rgb(201, 198, 198);
 }
 
-/* @media only screen and (max-width: 694px) {
-  .side-tools {
-    display: flex;
+@media only screen and (max-width: 768px) {
+  main {
     flex-direction: column;
-    height: 452px;
-  
-    justify-content: space-evenly;
+  }
+  .side-tools {
+    width: 450px;
+    height: 21vh;
+    align-items: flex-start;
+  }
+
+  .side-tools > div {
+    flex-direction: row;
+    align-content: center;
+    height: 69px;
   }
 
   .help-btn {
+    height: 67px;
+    width: 236px;
   }
 
   .tools-btn {
+    width: 210px;
   }
-} */
+
+  .number-btn {
+    width: 448px;
+    height: 47px;
+  }
+
+  .number {
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  main {
+    align-items: center;
+  }
+  table {
+    width: 270px;
+  }
+
+  td {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+  }
+  .side-tools {
+    width: 270px;
+    height: 68px;
+  }
+  .side-tools > div {
+    width: 269px;
+    height: 38px;
+  }
+  .help-btn {
+    height: 35px;
+    width: 236px;
+  }
+
+  .help-btn > button {
+    padding: 5px;
+    font-size: 10px;
+  }
+
+  .tools-btn > button > img {
+    width: 15px;
+    height: 15px;
+  }
+
+  .number-btn {
+    width: 269px;
+    height: 28px;
+  }
+
+  .number {
+    font-size: 10px;
+    width: 15px;
+    height: 15px;
+  }
+}
