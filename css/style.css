@@ -52,7 +52,6 @@ tr:nth-child(3n) td {
   display: flex;
   flex-direction: column;
   height: 452px;
-  /* border: 3px solid green; */
   justify-content: space-evenly;
 }
 .side-tools > div {
@@ -124,7 +123,7 @@ tr:nth-child(3n) td {
   body {
     position: fixed;
     align-items: flex-start;
-    margin: 33px auto;
+    margin: 7px auto;
   }
   main {
     flex-direction: column;
@@ -133,8 +132,7 @@ tr:nth-child(3n) td {
     display: flex;
     align-items: center;
     width: 450px;
-    height: 238px;
-    /* border: solid; */
+    height: 212px;
     flex-direction: row;
   }
   .side-tools > div {
@@ -153,6 +151,7 @@ tr:nth-child(3n) td {
 
   .number-btn {
     width: 319px;
+    height: 212px;
   }
 
   .number {
@@ -168,7 +167,6 @@ tr:nth-child(3n) td {
   }
   table {
     width: 400px;
-    /* margin-bottom: 1rem; */
   }
 
   td {
@@ -180,17 +178,14 @@ tr:nth-child(3n) td {
     display: flex;
     align-items: center;
     width: 400px;
-    height: 290px;
-    /* border: solid; */
+    height: 253px;
     flex-direction: column;
   }
   .side-tools > div {
     width: 399px;
     height: 111px;
-    /* margin-bottom: 1rem;
-    /* margin-top: 1rem; */
-    /* border: solid; */
   }
+
   .help-btn {
     height: 35px;
     width: 397px;
@@ -207,16 +202,45 @@ tr:nth-child(3n) td {
   }
 
   .number-btn {
-    display: flex;
     width: 199px;
+    height: 253px;
   }
 
   .number {
-    font-size: 30px;
     width: 50px;
     height: 50px;
   }
 }
 
 @media only screen and (max-width: 399px) {
+  table {
+    width: 340px;
+    margin-bottom: 1rem;
+  }
+  td {
+    width: 37.777px;
+    height: 37.777px;
+  }
+  .side-tools {
+    width: 339px;
+    height: 250px;
+  }
+  .side-tools > div {
+    width: 339px;
+  }
+  .help-btn {
+    width: 337px;
+    justify-content: space-around;
+    margin-bottom: 0.6rem;
+  }
+
+  .number-btn {
+    width: 156px;
+    height: 228px;
+  }
+
+  .number {
+    width: 40px;
+    height: 40px;
+  }
 }
