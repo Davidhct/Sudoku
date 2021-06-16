@@ -187,6 +187,7 @@ tr:nth-child(3n) td {
   }
 
   .help-btn {
+    justify-content: space-between;
     height: 35px;
     width: 397px;
   }
@@ -223,17 +224,19 @@ tr:nth-child(3n) td {
   }
   .side-tools {
     width: 339px;
-    height: 250px;
+    height: 283px;
   }
   .side-tools > div {
     width: 339px;
   }
   .help-btn {
     width: 337px;
-    justify-content: space-around;
     margin-bottom: 0.6rem;
   }
 
+  .tools-btn {
+    justify-content: space-between;
+  }
   .number-btn {
     width: 156px;
     height: 228px;
