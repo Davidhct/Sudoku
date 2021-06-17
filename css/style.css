@@ -122,7 +122,7 @@ tr:nth-child(3n) td {
 @media only screen and (max-width: 768px) {
   body {
     position: fixed;
-    align-items: flex-start;
+    /* align-items: flex-start; */
     margin: 7px auto;
   }
   main {
@@ -216,7 +216,8 @@ tr:nth-child(3n) td {
 @media only screen and (max-width: 399px) {
   table {
     width: 340px;
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
+    margin-top: 4rem;
   }
   td {
     width: 37.777px;
@@ -224,10 +225,11 @@ tr:nth-child(3n) td {
   }
   .side-tools {
     width: 339px;
-    height: 283px;
+    height: 230px;
   }
   .side-tools > div {
     width: 339px;
+    /* margin-bottom: 2rem;*/
   }
   .help-btn {
     width: 337px;
@@ -238,8 +240,8 @@ tr:nth-child(3n) td {
     justify-content: space-between;
   }
   .number-btn {
-    width: 156px;
-    height: 228px;
+    width: 234px;
+    height: 129px;
   }
 
   .number {
