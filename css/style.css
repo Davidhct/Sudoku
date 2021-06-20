@@ -53,6 +53,7 @@ tr:nth-child(3n) td {
   flex-direction: column;
   height: 452px;
   justify-content: space-evenly;
+  align-items: stretch;
 }
 .side-tools > div {
   display: flex;
@@ -76,6 +77,8 @@ tr:nth-child(3n) td {
   cursor: pointer;
   font-size: 17px;
   background: rgb(78 111 232);
+  color: aliceblue;
+  width: 87px;
 }
 .help-btn > button:hover {
   background: rgb(82 143 206);
@@ -126,12 +129,16 @@ tr:nth-child(3n) td {
   main {
     flex-direction: column;
   }
+  table {
+    margin-bottom: 1rem;
+  }
   .side-tools {
     display: flex;
     align-items: center;
     width: 450px;
-    height: 212px;
-    flex-direction: row;
+    height: 203px;
+    flex-wrap: wrap;
+    /* border: solid; */
   }
   .side-tools > div {
     width: 399px;
@@ -142,13 +149,16 @@ tr:nth-child(3n) td {
     height: 67px;
     width: 236px;
   }
+  .tools-btn {
+    width: 223px;
+  }
   .tools-btn > button > img {
     width: 35px;
     height: 35px;
   }
 
   .number-btn {
-    width: 319px;
+    width: 189px;
     height: 212px;
   }
 
@@ -159,7 +169,7 @@ tr:nth-child(3n) td {
   }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 454px) {
   main {
     align-items: center;
   }
@@ -177,7 +187,8 @@ tr:nth-child(3n) td {
     align-items: center;
     width: 400px;
     height: 326px;
-    flex-direction: column;
+    border: solid;
+    flex-direction: row;
   }
   .side-tools > div {
     width: 399px;
@@ -193,6 +204,11 @@ tr:nth-child(3n) td {
   .help-btn > button {
     font-size: 17px;
   }
+  .tools-btn {
+    /* width: 223px; */
+    height: 1px;
+    border: solid;
+  }
 
   .tools-btn > button > img {
     width: 29px;
@@ -200,17 +216,16 @@ tr:nth-child(3n) td {
   }
 
   .number-btn {
-    width: 251px;
-    height: 282px;
+    width: 168px;
+    height: 203px;
   }
 
   .number {
-    width: 50px;
-    height: 50px;
-    margin: 13px;
+    width: 44px;
+    height: 44px;
   }
 }
-
+/*
 @media only screen and (max-width: 399px) {
   body {
     align-items: flex-start;
@@ -266,4 +281,4 @@ tr:nth-child(3n) td {
   .help-btn {
     width: 275px;
   }
-}
+} */
