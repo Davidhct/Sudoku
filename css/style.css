@@ -94,6 +94,9 @@ tr:nth-child(3n) td {
   border: none;
   cursor: pointer;
 }
+.tools-btn > button:active {
+  background: rgb(201, 198, 198);
+}
 .tools-btn > button > img {
   width: 32px;
   height: 32px;
@@ -175,6 +178,7 @@ tr:nth-child(3n) td {
   }
   table {
     width: 400px;
+    margin-bottom: 0;
   }
 
   td {
@@ -186,8 +190,8 @@ tr:nth-child(3n) td {
     display: flex;
     align-items: center;
     width: 400px;
-    height: 326px;
-    border: solid;
+    height: 285px;
+    /* border: solid; */
     flex-direction: row;
   }
   .side-tools > div {
@@ -203,16 +207,19 @@ tr:nth-child(3n) td {
 
   .help-btn > button {
     font-size: 17px;
+    padding: 10px;
   }
   .tools-btn {
-    /* width: 223px; */
-    height: 1px;
-    border: solid;
+    width: 54px;
+    height: 233px;
+    /* border: solid; */
+    display: flex;
+    flex-direction: column;
   }
 
   .tools-btn > button > img {
-    width: 29px;
-    height: 29px;
+    width: 27px;
+    height: 27px;
   }
 
   .number-btn {
