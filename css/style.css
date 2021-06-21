@@ -141,7 +141,6 @@ tr:nth-child(3n) td {
     width: 450px;
     height: 203px;
     flex-wrap: wrap;
-    /* border: solid; */
   }
   .side-tools > div {
     width: 399px;
@@ -175,10 +174,11 @@ tr:nth-child(3n) td {
 @media only screen and (max-width: 454px) {
   main {
     align-items: center;
+    margin-bottom: 2rem;
   }
   table {
     width: 400px;
-    margin-bottom: 0;
+    margin-bottom: 0.5rem;
   }
 
   td {
@@ -191,7 +191,6 @@ tr:nth-child(3n) td {
     align-items: center;
     width: 400px;
     height: 285px;
-    /* border: solid; */
     flex-direction: row;
   }
   .side-tools > div {
@@ -212,7 +211,6 @@ tr:nth-child(3n) td {
   .tools-btn {
     width: 54px;
     height: 233px;
-    /* border: solid; */
     display: flex;
     flex-direction: column;
   }
@@ -232,60 +230,43 @@ tr:nth-child(3n) td {
     height: 44px;
   }
 }
-/*
-@media only screen and (max-width: 399px) {
-  body {
-    align-items: flex-start;
+
+@media only screen and (max-width: 405px) {
+  main {
+    margin-bottom: 0;
   }
   table {
-    width: 340px;
-    margin-top: 2rem;
-  }
-  td {
-    width: 37.777px;
-    height: 37.777px;
-  }
-  .side-tools {
-    width: 339px;
-    height: 230px;
-  }
-  .side-tools > div {
-    width: 339px;
-  }
-  .help-btn {
-    width: 337px;
-    margin-bottom: 0.6rem;
+    width: 300px;
+    margin-bottom: 0.5rem;
   }
 
+  td {
+    width: 33.333px;
+    height: 33.333px;
+  }
+  .side-tools {
+    width: 300px;
+    height: 242px;
+  }
+  .side-tools > div {
+    width: 399px;
+    height: 111px;
+  }
+
+  .help-btn > button {
+    font-size: 16px;
+    padding: 7px;
+    width: 77px;
+  }
   .tools-btn {
-    justify-content: space-between;
+    height: 203px;
+  }
+  .tools-btn > button > img {
+    width: 22px;
+    height: 22px;
   }
   .number-btn {
-    width: 234px;
-    height: 129px;
-  }
-
-  .number {
-    width: 40px;
-    height: 40px;
+    width: 171px;
+    height: 171px;
   }
 }
-
-@media only screen and (max-width: 340px) {
-  table {
-    width: 275px;
-  }
-  td {
-    width: 30.555px;
-    height: 30.555px;
-  }
-  .side-tools {
-    width: 275px;
-  }
-  .side-tools > div {
-    width: 275px;
-  }
-  .help-btn {
-    width: 275px;
-  }
-} */
