@@ -12,6 +12,7 @@ body {
   width: 100vw;
   font-family: "Hind", sans-serif;
   background-attachment: fixed;
+  background: #e3e7ea;
 }
 
 main {
@@ -24,6 +25,7 @@ table {
   border: 2px solid black;
   border-collapse: collapse;
   width: 450px;
+  background: white;
 }
 
 td {
