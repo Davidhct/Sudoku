@@ -18,6 +18,7 @@ body {
 main {
   display: flex;
   align-items: flex-end;
+  width: 776px;
   justify-content: space-around;
 }
 
@@ -133,6 +134,7 @@ tr:nth-child(3n) td {
   }
   main {
     flex-direction: column;
+    width: auto;
   }
   table {
     margin-bottom: 1rem;
