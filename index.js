@@ -10,7 +10,7 @@ let grid = [
   [6, 4, 0, 3, 0, 0, 0, 0, 0],
 ];
 let setCell;
-
+const numbers = document.getElementsByClassName("number");
 class Sudoku {
   constructor() {
     this.grid = grid;
@@ -26,25 +26,32 @@ class Sudoku {
     }
   }
 
-  enterNumber(e1) {
-    let cell = e1.target;
+  enterNumber(e) {
+    let cell = e.target;
     sudoku.chooseNumber(cell.id);
   }
 
   chooseNumber(cell) {
+    let flag;
     setCell = document.getElementById(cell);
-    document
-      .querySelector(".number-btn")
-      .addEventListener("click", function (e) {
-        let flag = sudoku.validation(setCell.id, e.target.innerHTML);
-        console.log(setCell.id);
-        console.log(flag);
-        if (flag) setCell.innerHTML = e.target.innerHTML;
-        else {
-          setCell.innerHTML = e.target.innerHTML;
+    for (let i = 0; i < numbers.length; i++) {
+      numbers[i].addEventListener("click", function (e) {
+        console.log(numbers[i].innerHTML);
+
+        flag = sudoku.validation(cell, numbers[i].innerHTML);
+        if (flag === true) {
+          setCell.innerHTML = numbers[i].innerHTML;
+          // console.log(setCell.innerText);
+          i = numbers.length - 1;
+        } else {
+          // console.log(setCell);
+          // setCell.innerHTML = e.target.innerHTML;
+          setCell.innerHTML = numbers[i].innerHTML;
           setCell.style.color = "red";
+          i = numbers.length - 1;
         }
       });
+    }
   }
 
   validation(cell, num) {
@@ -52,7 +59,7 @@ class Sudoku {
     for (let i = 0; i < this.grid.length; i++) {
       // console.log(typeof this.grid[cell[0]][i]);
       if (this.grid[cell[0]][i] === Number(num)) {
-        // console.log("1");
+        console.log("vali");
         return false;
       }
     }
