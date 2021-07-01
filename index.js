@@ -10,7 +10,9 @@ let grid = [
   [6, 4, 0, 3, 0, 0, 0, 0, 0],
 ];
 const numbers = document.getElementsByClassName("number");
+
 let setCell;
+
 class Sudoku {
   constructor() {
     this.grid = grid;
