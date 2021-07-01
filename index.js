@@ -37,35 +37,40 @@ class Sudoku {
     setCell = document.getElementById(cell);
     for (let i = 0; i < numbers.length; i++) {
       numbers[i].addEventListener("click", function () {
-        flag = sudoku.validation(cell, numbers[i].innerHTML);
-        console.log(flag);
-        if (flag) {
-          sudoku.updateSudoku(numbers[i].innerHTML);
-        }
+        sudoku.updateSudoku(numbers[i].innerHTML);
       });
     }
   }
 
   validation(cell, num) {
-    console.log("validation");
+    // Check row
     for (let i = 0; i < this.grid.length; i++) {
       if (
         Number(document.getElementById(`${cell[0]}${i}`).innerHTML) ===
         Number(num)
-      ) {
-        console.log("vali-row", cell);
+      )
         return false;
-      }
     }
-
+    // Check col
     for (let i = 0; i < this.grid.length; i++) {
-      console.log(document.getElementById(`${i}${cell[1]}`));
       if (
         Number(document.getElementById(`${i}${cell[1]}`).innerHTML) ===
         Number(num)
-      ) {
-        console.log("vali-col", cell);
+      )
         return false;
+    }
+
+    // Check box
+    let row = Math.trunc(cell[0] / 3);
+    let col = Math.trunc(cell[1] / 3);
+
+    for (let i = row * 3; i < col * 3 + 3; i++) {
+      for (let j = col * 3; i < col * 3 + 3; j++) {
+        if (
+          Number(document.getElementById(`${i}${cell[1]}`).innerHTML) ===
+          Number(num)
+        )
+          return false;
       }
     }
     return true;
