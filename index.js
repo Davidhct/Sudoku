@@ -27,43 +27,53 @@ class Sudoku {
   }
 
   enterNumber(e) {
+    console.log("click");
     let cell = e.target;
-    sudoku.chooseNumber(cell.id);
+    if (Number(cell.innerHTML) === 0) sudoku.chooseNumber(cell.id);
   }
 
   chooseNumber(cell) {
     let flag;
     setCell = document.getElementById(cell);
     for (let i = 0; i < numbers.length; i++) {
-      numbers[i].addEventListener("click", function (e) {
-        console.log(numbers[i].innerHTML);
-
+      numbers[i].addEventListener("click", function () {
         flag = sudoku.validation(cell, numbers[i].innerHTML);
-        if (flag === true) {
-          setCell.innerHTML = numbers[i].innerHTML;
-          // console.log(setCell.innerText);
-          i = numbers.length - 1;
-        } else {
-          // console.log(setCell);
-          // setCell.innerHTML = e.target.innerHTML;
-          setCell.innerHTML = numbers[i].innerHTML;
-          setCell.style.color = "red";
-          i = numbers.length - 1;
+        console.log(flag);
+        if (flag) {
+          sudoku.updateSudoku(numbers[i].innerHTML);
         }
       });
     }
   }
 
   validation(cell, num) {
-    // console.log(cell[0], cell[1]);
+    console.log("validation");
     for (let i = 0; i < this.grid.length; i++) {
-      // console.log(typeof this.grid[cell[0]][i]);
-      if (this.grid[cell[0]][i] === Number(num)) {
-        console.log("vali");
+      if (
+        Number(document.getElementById(`${cell[0]}${i}`).innerHTML) ===
+        Number(num)
+      ) {
+        console.log("vali-row", cell);
+        return false;
+      }
+    }
+
+    for (let i = 0; i < this.grid.length; i++) {
+      console.log(document.getElementById(`${i}${cell[1]}`));
+      if (
+        Number(document.getElementById(`${i}${cell[1]}`).innerHTML) ===
+        Number(num)
+      ) {
+        console.log("vali-col", cell);
         return false;
       }
     }
     return true;
+  }
+
+  updateSudoku(num) {
+    setCell.innerHTML = num;
+    setCell.style.color = "blue";
   }
 }
 
