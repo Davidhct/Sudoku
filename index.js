@@ -9,8 +9,8 @@ let grid = [
   [0, 0, 0, 2, 0, 0, 9, 0, 7],
   [6, 4, 0, 3, 0, 0, 0, 0, 0],
 ];
-let setCell;
 const numbers = document.getElementsByClassName("number");
+
 class Sudoku {
   constructor() {
     this.grid = grid;
@@ -33,8 +33,6 @@ class Sudoku {
   }
 
   chooseNumber(cell) {
-    let flag;
-    setCell = document.getElementById(cell);
     for (let i = 0; i < numbers.length; i++) {
       numbers[i].addEventListener("click", function () {
         sudoku.updateSudoku(numbers[i].innerHTML);
