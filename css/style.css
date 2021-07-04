@@ -65,14 +65,16 @@ tr:nth-child(3n) td {
   justify-content: space-evenly;
 }
 
-.help-btn {
+.help-btn,
+.check-btn {
   display: flex;
   height: 44px;
   align-items: center;
   justify-content: space-evenly;
 }
 
-.help-btn > button {
+.help-btn > button,
+.check-btn > button {
   padding: 11px;
   border-radius: 5px;
   outline: none;
@@ -85,6 +87,13 @@ tr:nth-child(3n) td {
 }
 .help-btn > button:hover {
   background: rgb(82 143 206);
+}
+
+.check-btn > button {
+  background: rgb(39 144 110);
+}
+.check-btn > button:hover {
+  background: rgb(79 164 136);
 }
 
 .tools-btn {
@@ -208,7 +217,8 @@ tr:nth-child(3n) td {
     width: 397px;
   }
 
-  .help-btn > button {
+  .help-btn > button,
+  .check-btn > button {
     font-size: 17px;
     padding: 10px;
   }
@@ -257,10 +267,14 @@ tr:nth-child(3n) td {
     height: 111px;
   }
 
-  .help-btn > button {
+  .help-btn > button,
+  .check-btn > button {
     font-size: 16px;
     padding: 7px;
     width: 77px;
+  }
+  .check-btn > button {
+    width: 60px;
   }
   .tools-btn {
     height: 203px;

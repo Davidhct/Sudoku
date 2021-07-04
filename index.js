@@ -65,7 +65,7 @@ class Sudoku {
     let row = Math.trunc(cell[0] / 3);
     let col = Math.trunc(cell[1] / 3);
 
-    for (let i = row * 3; i < col * 3 + 3; i++) {
+    for (let i = row * 3; i < row * 3 + 3; i++) {
       for (let j = col * 3; i < col * 3 + 3; j++) {
         if (
           Number(document.getElementById(`${i}${cell[1]}`).innerHTML) ===
