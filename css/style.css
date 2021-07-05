@@ -74,7 +74,7 @@ tr:nth-child(3n) td {
 }
 
 .help-btn > button,
-.check-btn > button {
+#check-btn {
   padding: 11px;
   border-radius: 5px;
   outline: none;
@@ -89,11 +89,15 @@ tr:nth-child(3n) td {
   background: rgb(82 143 206);
 }
 
-.check-btn > button {
+#check-btn {
   background: rgb(39 144 110);
 }
-.check-btn > button:hover {
+/* .check-btn > button:hover {
   background: rgb(79 164 136);
+} */
+#check-btn:disabled {
+  background: rgb(218, 205, 205);
+  cursor: not-allowed;
 }
 
 .tools-btn {
