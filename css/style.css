@@ -92,9 +92,9 @@ tr:nth-child(3n) td {
 #check-btn {
   background: rgb(39 144 110);
 }
-/* .check-btn > button:hover {
+.check-btn > button:hover {
   background: rgb(79 164 136);
-} */
+}
 #check-btn:disabled {
   background: rgb(218, 205, 205);
   cursor: not-allowed;
