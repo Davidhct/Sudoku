@@ -9,20 +9,22 @@ let grid2 = [
   [0, 0, 0, 2, 0, 0, 9, 0, 7],
   [6, 4, 0, 3, 0, 0, 0, 0, 0],
 ];
-let grid = [
+let grid1 = [
   [8, 9, 5, 7, 4, 2, 1, 3, 6],
   [2, 7, 1, 9, 6, 3, 4, 8, 5],
   [4, 6, 3, 5, 8, 1, 7, 9, 2],
   [9, 3, 4, 6, 1, 7, 2, 5, 8],
-  [5, 1, 7, 2, 3, 8, 9, 6, 4],
+  [5, 1, 7, 2, 0, 8, 9, 6, 4],
   [6, 8, 2, 4, 5, 9, 3, 7, 1],
   [1, 5, 9, 8, 7, 4, 6, 2, 3],
   [7, 4, 6, 3, 2, 5, 8, 1, 9],
   [3, 2, 8, 1, 9, 6, 5, 4, 7],
 ];
-
+let grid = grid1;
 let nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const numbers = document.getElementsByClassName("number");
+const checkBtn = document.getElementById("check-btn");
+const table = document.querySelector("table");
 
 let setCell;
 
@@ -53,13 +55,31 @@ class Sudoku {
     for (let i = 0; i < numbers.length; i++) {
       numbers[i].addEventListener("click", function () {
         sudoku.updateSudoku(numbers[i].innerHTML);
+        if (sudoku.checkComplition) checkBtn.disabled = false;
+        else checkBtn.disabled = true;
       });
     }
   }
-  checkGrid(num = nums, row = undefined, col = undefined) {
+  checkComplition() {
+    for (let i = 0; i < this.grid.length; i++) {
+      for (let j = 0; j < this.grid.length; j++) {
+        console.log(typeof this.grid[i][j]);
+        if (this.grid[i][j] === 0) {
+          console.log(false);
+          return false;
+        }
+      }
+    }
+    console.log(true);
+    return true;
+  }
+
+  checkGrid(num = undefined, row = undefined, col = undefined) {
     let flagRow, flagCol, flagSqu;
+    num = this.nums;
 
     if (typeof num === "number") {
+      // console.log("1");
       flagRow = sudoku.rowValidation(row, num);
       flagCol = sudoku.colValidation(col, num);
       flagSqu = sudoku.squareValidation(row, col, num);
@@ -74,7 +94,9 @@ class Sudoku {
         for (let j = 0; j < this.grid.length; j++) {
           flagRow = sudoku.rowValidation(j, num[i]);
           flagCol = sudoku.colValidation(j, num[i]);
-          flagSqu = sudoku.squareValidation(i, j, num[i]);
+          flagSqu = sudoku.squareValidation(j, j, num[i]);
+
+          // console.log("2");
           if (flagRow === false || flagCol === false || flagSqu === false) {
             console.log("flagRow = ", flagRow);
             console.log("flagCol = ", flagCol);
@@ -92,46 +114,48 @@ class Sudoku {
     return true;
   }
 
+  // Check row
   rowValidation(row, num) {
-    // Check row
-    console.log("Enter rowValidation method");
-    let count = 0;
-
+    // console.log("Enter rowValidation method");
+    const map = new Map();
     for (let i = 0; i < this.grid.length; i++) {
       if (this.grid[row][i] === num) {
-        console.log(this.grid[row][i]);
-        return false;
+        if (map.get(this.grid[row][i]) === 0) return false;
+
+        map.set(this.grid[row][i], 0);
       }
     }
     return true;
   }
+  // Check col
   colValidation(col, num) {
-    // Check col
-    console.log("Enter colValidation method");
-    let count = 0;
+    // console.log("Enter colValidation method");
+    const map = new Map();
     for (let i = 0; i < this.grid.length; i++) {
       if (this.grid[i][col] === num) {
-        console.log(this.grid[i][col]);
-        return false;
+        if (map.get(this.grid[i][col]) === 0) return false;
+
+        map.set(this.grid[i][col], 0);
       }
     }
     return true;
   }
+  // Check box
   squareValidation(row, col, num) {
-    // Check box
-    console.log("Enter squareValidation method");
+    // console.log("Enter squareValidation method");
     let squareSize = 3;
     let count = 0;
     let rowCorner = Math.floor(row / 3) * 3;
     let colCorner = Math.floor(col / 3) * 3;
-
+    const map = new Map();
     // Iterate through each row
     for (let i = rowCorner; i < rowCorner + squareSize; i++) {
       // Iterate through each column
       for (let j = colCorner; j < colCorner + squareSize; j++) {
         if (this.grid[i][j] === num) {
-          console.log(this.grid[i][j]);
-          return false;
+          if (map.get(this.grid[i][j]) === 0) return false;
+
+          map.set(this.grid[i][j], 0);
         }
       }
     }
@@ -139,17 +163,24 @@ class Sudoku {
   }
 
   updateSudoku(num) {
+    // console.log(this.grid);
+    let cell = setCell.id;
+    this.grid[cell[0]][cell[1]] = Number(num);
     setCell.innerHTML = num;
     setCell.style.color = "blue";
+    console.log(this.grid);
   }
 }
 
 const sudoku = new Sudoku();
+
 sudoku.displayGrid();
-document.querySelector("table").addEventListener("click", sudoku.enterNumber);
-document
-  .getElementById("check-btn")
-  .addEventListener("click", sudoku.checkGrid.bind(sudoku, 3, 4, 4));
+table.addEventListener("click", sudoku.enterNumber);
+checkBtn.addEventListener("click", sudoku.checkGrid.bind(sudoku));
+
+// document
+//   .getElementById("check-btn")
+//   .addEventListener("click", sudoku.checkComplition.bind(sudoku));
 
 // validation(cell, num) {
 //   // Check row
