@@ -20,7 +20,7 @@ let grid1 = [
   [7, 4, 6, 3, 2, 5, 8, 1, 9],
   [3, 2, 8, 1, 9, 6, 5, 4, 7],
 ];
-let grid = grid1;
+let grid = grid2;
 let nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const numbers = document.getElementsByClassName("number");
 const checkBtn = document.getElementById("check-btn");
@@ -75,87 +75,66 @@ class Sudoku {
   }
 
   checkGrid(num = undefined, row = undefined, col = undefined) {
-    let flagRow, flagCol, flagSqu;
+    let flagValid;
     num = this.nums;
-
-    if (typeof num === "number") {
-      // console.log("1");
-      flagRow = sudoku.rowValidation(row, num);
-      flagCol = sudoku.colValidation(col, num);
-      flagSqu = sudoku.squareValidation(row, col, num);
-      if (flagRow === false || flagCol === false || flagSqu === false) {
-        console.log("flagRow = ", flagRow);
-        console.log("flagCol = ", flagCol);
-        console.log("flagSqu = ", flagSqu);
-        return false;
-      }
-    } else {
-      for (let i = 0; i < this.grid.length; i++) {
-        for (let j = 0; j < this.grid.length; j++) {
-          flagRow = sudoku.rowValidation(j, num[i]);
-          flagCol = sudoku.colValidation(j, num[i]);
-          flagSqu = sudoku.squareValidation(j, j, num[i]);
-
-          // console.log("2");
-          if (flagRow === false || flagCol === false || flagSqu === false) {
-            console.log("flagRow = ", flagRow);
-            console.log("flagCol = ", flagCol);
-            console.log("flagSqu = ", flagSqu);
-            return false;
-          }
+    // if (typeof num === "number") {
+    //   // console.log("1");
+    //
+    //   flagSqu = sudoku.isValidSudoku(row, col, num);
+    //   if (flagValid === false) {
+    //     console.log("flagValid = ", flagValid);
+    //     return false;
+    //   }
+    // } else {
+    for (let i = 0; i < this.grid.length; i++) {
+      for (let j = 0; j < this.grid.length; j++) {
+        flagValid = sudoku.isValidSudoku(j, j, num[i]);
+        // console.log("2");
+        if (flagValid === false) {
+          console.log("flagValid = ", flagValid);
+          return false;
         }
       }
     }
-
-    console.log("flagRow = ", flagRow);
-    console.log("flagCol = ", flagCol);
-    console.log("flagSqu = ", flagSqu);
-
+    // }
+    console.log("flagValid = ", flagValid);
     return true;
   }
 
   // Check row
-  rowValidation(row, num) {
+  isValidSudoku(row, col, num) {
     // console.log("Enter rowValidation method");
-    const map = new Map();
+    const rowMap = new Map();
     for (let i = 0; i < this.grid.length; i++) {
       if (this.grid[row][i] === num) {
-        if (map.get(this.grid[row][i]) === 0) return false;
+        if (rowMap.get(this.grid[row][i]) === 0) return false;
 
-        map.set(this.grid[row][i], 0);
+        rowMap.set(this.grid[row][i], 0);
       }
     }
-    return true;
-  }
-  // Check col
-  colValidation(col, num) {
-    // console.log("Enter colValidation method");
-    const map = new Map();
+
+    // Check col
+    const colMap = new Map();
     for (let i = 0; i < this.grid.length; i++) {
       if (this.grid[i][col] === num) {
-        if (map.get(this.grid[i][col]) === 0) return false;
+        if (colMap.get(this.grid[i][col]) === 0) return false;
 
-        map.set(this.grid[i][col], 0);
+        colMap.set(this.grid[i][col], 0);
       }
     }
-    return true;
-  }
-  // Check box
-  squareValidation(row, col, num) {
-    // console.log("Enter squareValidation method");
-    let squareSize = 3;
-    let count = 0;
+
+    // Check box
+    const squareSize = 3;
     let rowCorner = Math.floor(row / 3) * 3;
     let colCorner = Math.floor(col / 3) * 3;
-    const map = new Map();
+    const squareMap = new Map();
     // Iterate through each row
     for (let i = rowCorner; i < rowCorner + squareSize; i++) {
       // Iterate through each column
       for (let j = colCorner; j < colCorner + squareSize; j++) {
         if (this.grid[i][j] === num) {
-          if (map.get(this.grid[i][j]) === 0) return false;
-
-          map.set(this.grid[i][j], 0);
+          if (squareMap.get(this.grid[i][j]) === 0) return false;
+          squareMap.set(this.grid[i][j], 0);
         }
       }
     }
