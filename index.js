@@ -25,12 +25,18 @@ const globalVar = {
   nums: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   setCell: undefined,
   undoStack: [],
+  count: 0,
+  cellCount: true,
+  totalNumCell: 81,
 };
 
 const numbersBtn = document.getElementsByClassName("number");
 const checkBtn = document.getElementById("check-btn");
 const sudokuTable = document.querySelector("table");
 const undoBtn = document.getElementById("undo-btn");
+const eraseBtn = document.getElementById("erase-btn");
+const notesBtn = document.getElementById("notes-btn");
+const hintBtn = document.getElementById("hint-btn");
 
 // onload = () => {
 //   run();
@@ -57,50 +63,41 @@ class Sudoku {
     let cell = e.target;
     if (Number(cell.innerHTML) === 0) {
       console.log("33");
-      sudoku.chooseNumber(cell.id);
+      const tmp = cell.id;
+      globalVar.setCell = document.getElementById(tmp);
+      if (globalVar.count === globalVar.totalNumCell) checkBtn.disabled = false;
+      else checkBtn.disabled = true;
     }
   }
 
-  chooseNumber(cell) {
-    globalVar.setCell = document.getElementById(cell);
-    for (let i = 0; i < numbersBtn.length; i++) {
-      numbersBtn[i].addEventListener("click", function () {
-        sudoku.updateSudoku(numbersBtn[i].innerHTML);
-
-        if (sudoku.isComplete() === true) checkBtn.disabled = false;
-        else checkBtn.disabled = true;
-      });
-    }
-  }
   isComplete() {
-    for (let i = 0; i < this.grid.length; i++) {
-      for (let j = 0; j < this.grid.length; j++) {
-        if (this.grid[i][j] === 0) {
-          console.log("checkCompliation function");
-          return false;
-        }
-      }
-    }
-    console.log(true);
-    return true;
+    let count = 0;
+    for (let i = 0; i < this.grid.length; i++)
+      for (let j = 0; j < this.grid.length; j++)
+        if (this.grid[i][j] !== 0) count++;
+
+    globalVar.count = globalVar.totalNumCell - count;
   }
 
-  undo() {
+  erase() {
+    globalVar.undoStack.unshift({
+      action: "eraseNum",
+      id: globalVar.setCell.id,
+    });
+    const cellId = globalVar.undoStack.shift();
+    document.getElementById(cellId).innerHTML = "";
     console.log(globalVar.undoStack);
   }
+  // undo() {
+  //   const cellId = globalVar.undoStack.shift();
+  //   document.getElementById(cellId).innerHTML = "";
+  //   console.log(globalVar.undoStack);
+  // }
 
-  checkGrid(num = undefined, row = undefined, col = undefined) {
+  checkGrid() {
     let flagValid;
     num = this.nums;
-    // if (typeof num === "number") {
-    //   // console.log("1");
-    //
-    //   flagSqu = sudoku.isValidSudoku(row, col, num);
-    //   if (flagValid === false) {
-    //     console.log("flagValid = ", flagValid);
-    //     return false;
-    //   }
-    // } else {
+
     for (let i = 0; i < this.grid.length; i++) {
       for (let j = 0; j < this.grid.length; j++) {
         flagValid = sudoku.isValidSudoku(j, j, num[i]);
@@ -123,7 +120,6 @@ class Sudoku {
     for (let i = 0; i < this.grid.length; i++) {
       if (this.grid[row][i] === num) {
         if (rowMap.get(this.grid[row][i]) === 0) return false;
-
         rowMap.set(this.grid[row][i], 0);
       }
     }
@@ -133,7 +129,6 @@ class Sudoku {
     for (let i = 0; i < this.grid.length; i++) {
       if (this.grid[i][col] === num) {
         if (colMap.get(this.grid[i][col]) === 0) return false;
-
         colMap.set(this.grid[i][col], 0);
       }
     }
@@ -163,13 +158,23 @@ class Sudoku {
     this.grid[cell[0]][cell[1]] = Number(num);
     globalVar.setCell.innerHTML = num;
     globalVar.setCell.style.color = "blue";
-    globalVar.undoStack.unshift(Number(num));
+
+    globalVar.undoStack.unshift({ action: "addNum", id: globalVar.setCell.id });
+    globalVar.count = globalVar.count + 1;
+  }
+  listenerButtonNumber() {
+    for (let i = 0; i < numbersBtn.length; i++) {
+      numbersBtn[i].addEventListener("click", function () {
+        sudoku.updateSudoku(numbersBtn[i].innerHTML);
+      });
+    }
   }
 }
 
 const sudoku = new Sudoku();
-
+sudoku.isComplete();
 sudoku.displayGrid();
+sudoku.listenerButtonNumber();
 sudokuTable.addEventListener("click", sudoku.enterNumber);
 checkBtn.addEventListener("click", sudoku.checkGrid.bind(sudoku));
 undoBtn.addEventListener("click", sudoku.undo.bind(sudoku));
