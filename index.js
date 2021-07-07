@@ -20,18 +20,26 @@ let grid1 = [
   [7, 4, 6, 3, 2, 5, 8, 1, 9],
   [3, 2, 8, 1, 9, 6, 5, 4, 7],
 ];
-let grid = grid2;
-let nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-const numbers = document.getElementsByClassName("number");
-const checkBtn = document.getElementById("check-btn");
-const table = document.querySelector("table");
+const globalVar = {
+  grid: grid2,
+  nums: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  setCell: undefined,
+  undoStack: [],
+};
 
-let setCell;
+const numbersBtn = document.getElementsByClassName("number");
+const checkBtn = document.getElementById("check-btn");
+const sudokuTable = document.querySelector("table");
+const undoBtn = document.getElementById("undo-btn");
+
+// onload = () => {
+//   run();
+// };
 
 class Sudoku {
   constructor() {
-    this.nums = nums;
-    this.grid = grid;
+    this.nums = globalVar.nums;
+    this.grid = globalVar.grid;
   }
 
   displayGrid() {
@@ -45,33 +53,40 @@ class Sudoku {
   }
 
   enterNumber(e) {
-    console.log("click");
+    console.log(this);
     let cell = e.target;
-    if (Number(cell.innerHTML) === 0) sudoku.chooseNumber(cell.id);
+    if (Number(cell.innerHTML) === 0) {
+      console.log("33");
+      sudoku.chooseNumber(cell.id);
+    }
   }
 
   chooseNumber(cell) {
-    setCell = document.getElementById(cell);
-    for (let i = 0; i < numbers.length; i++) {
-      numbers[i].addEventListener("click", function () {
-        sudoku.updateSudoku(numbers[i].innerHTML);
-        if (sudoku.checkComplition) checkBtn.disabled = false;
+    globalVar.setCell = document.getElementById(cell);
+    for (let i = 0; i < numbersBtn.length; i++) {
+      numbersBtn[i].addEventListener("click", function () {
+        sudoku.updateSudoku(numbersBtn[i].innerHTML);
+
+        if (sudoku.isComplete() === true) checkBtn.disabled = false;
         else checkBtn.disabled = true;
       });
     }
   }
-  checkComplition() {
+  isComplete() {
     for (let i = 0; i < this.grid.length; i++) {
       for (let j = 0; j < this.grid.length; j++) {
-        console.log(typeof this.grid[i][j]);
         if (this.grid[i][j] === 0) {
-          console.log(false);
+          console.log("checkCompliation function");
           return false;
         }
       }
     }
     console.log(true);
     return true;
+  }
+
+  undo() {
+    console.log(globalVar.undoStack);
   }
 
   checkGrid(num = undefined, row = undefined, col = undefined) {
@@ -143,19 +158,21 @@ class Sudoku {
 
   updateSudoku(num) {
     // console.log(this.grid);
-    let cell = setCell.id;
+    console.log("1");
+    let cell = globalVar.setCell.id;
     this.grid[cell[0]][cell[1]] = Number(num);
-    setCell.innerHTML = num;
-    setCell.style.color = "blue";
-    console.log(this.grid);
+    globalVar.setCell.innerHTML = num;
+    globalVar.setCell.style.color = "blue";
+    globalVar.undoStack.unshift(Number(num));
   }
 }
 
 const sudoku = new Sudoku();
 
 sudoku.displayGrid();
-table.addEventListener("click", sudoku.enterNumber);
+sudokuTable.addEventListener("click", sudoku.enterNumber);
 checkBtn.addEventListener("click", sudoku.checkGrid.bind(sudoku));
+undoBtn.addEventListener("click", sudoku.undo.bind(sudoku));
 
 // document
 //   .getElementById("check-btn")
