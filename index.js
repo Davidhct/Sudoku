@@ -80,19 +80,25 @@ class Sudoku {
   }
 
   erase() {
+    const cell = globalVar.undoStack.shift();
+    console.log(cell.id);
+    const value = document.getElementById(cell.id).innerHTML;
+
+    document.getElementById(cell.id).innerHTML = "";
+
+    console.log(globalVar.undoStack);
+
     globalVar.undoStack.unshift({
       action: "eraseNum",
       id: globalVar.setCell.id,
+      value: value,
     });
-    const cellId = globalVar.undoStack.shift();
-    document.getElementById(cellId).innerHTML = "";
+  }
+  undo() {
+    // const cellId = globalVar.undoStack.shift();
+    // document.getElementById(cellId).innerHTML = "";
     console.log(globalVar.undoStack);
   }
-  // undo() {
-  //   const cellId = globalVar.undoStack.shift();
-  //   document.getElementById(cellId).innerHTML = "";
-  //   console.log(globalVar.undoStack);
-  // }
 
   checkGrid() {
     let flagValid;
@@ -162,6 +168,7 @@ class Sudoku {
     globalVar.undoStack.unshift({ action: "addNum", id: globalVar.setCell.id });
     globalVar.count = globalVar.count + 1;
   }
+
   listenerButtonNumber() {
     for (let i = 0; i < numbersBtn.length; i++) {
       numbersBtn[i].addEventListener("click", function () {
@@ -178,6 +185,7 @@ sudoku.listenerButtonNumber();
 sudokuTable.addEventListener("click", sudoku.enterNumber);
 checkBtn.addEventListener("click", sudoku.checkGrid.bind(sudoku));
 undoBtn.addEventListener("click", sudoku.undo.bind(sudoku));
+eraseBtn.addEventListener("click", sudoku.erase);
 
 // document
 //   .getElementById("check-btn")
