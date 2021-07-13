@@ -25,9 +25,12 @@ const globalVar = {
   nums: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   setCell: undefined,
   undoStack: [],
+  eraseStack: [],
+  // noteStack: [],
   count: 0,
   cellCount: true,
   totalNumCell: 81,
+  // noteFlag: true,
 };
 
 const numbersBtn = document.getElementsByClassName("number");
@@ -35,12 +38,8 @@ const checkBtn = document.getElementById("check-btn");
 const sudokuTable = document.querySelector("table");
 const undoBtn = document.getElementById("undo-btn");
 const eraseBtn = document.getElementById("erase-btn");
-const notesBtn = document.getElementById("notes-btn");
-const hintBtn = document.getElementById("hint-btn");
-
-// onload = () => {
-//   run();
-// };
+// const notesBtn = document.getElementById("notes-btn");
+// const hintBtn = document.getElementById("hint-btn");
 
 class Sudoku {
   constructor() {
@@ -59,10 +58,8 @@ class Sudoku {
   }
 
   enterNumber(e) {
-    console.log(this);
     let cell = e.target;
     if (Number(cell.innerHTML) === 0) {
-      console.log("33");
       const tmp = cell.id;
       globalVar.setCell = document.getElementById(tmp);
       if (globalVar.count === globalVar.totalNumCell) checkBtn.disabled = false;
@@ -80,24 +77,47 @@ class Sudoku {
   }
 
   erase() {
-    const cell = globalVar.undoStack.shift();
-    console.log(cell.id);
-    const value = document.getElementById(cell.id).innerHTML;
+    if (globalVar.eraseStack.length > 0) {
+      let cell = globalVar.eraseStack.shift();
 
-    document.getElementById(cell.id).innerHTML = "";
+      globalVar.undoStack.unshift({
+        action: "eraseNum",
+        id: cell.id,
+        value: cell.value,
+      });
 
-    console.log(globalVar.undoStack);
-
-    globalVar.undoStack.unshift({
-      action: "eraseNum",
-      id: globalVar.setCell.id,
-      value: value,
-    });
+      document.getElementById(cell.id).innerHTML = "";
+    }
   }
+
+  // notes() {
+  //   if (globalVar.noteFlag === true) {
+  //     this.src = "./css/images/notes_on_icon.png";
+  //     sudoku.updateSudoku(undefined, "notes");
+  //     ///
+
+  //     ///
+  //     globalVar.noteFlag = false;
+  //   } else {
+  //     this.src = "./css/images/notes_off_icon.png";
+  //     globalVar.noteFlag = true;
+  //   }
+  // }
   undo() {
-    // const cellId = globalVar.undoStack.shift();
-    // document.getElementById(cellId).innerHTML = "";
-    console.log(globalVar.undoStack);
+    if (globalVar.undoStack.length > 0) {
+      const cell = globalVar.undoStack.shift();
+
+      switch (cell.action) {
+        case "addNum":
+          document.getElementById(cell.id).innerHTML = "";
+          globalVar.eraseStack.shift();
+          break;
+        case "eraseNum":
+          document.getElementById(cell.id).innerHTML = cell.value;
+          globalVar.eraseStack.shift();
+          break;
+      }
+    }
   }
 
   checkGrid() {
@@ -107,7 +127,6 @@ class Sudoku {
     for (let i = 0; i < this.grid.length; i++) {
       for (let j = 0; j < this.grid.length; j++) {
         flagValid = sudoku.isValidSudoku(j, j, num[i]);
-        // console.log("2");
         if (flagValid === false) {
           console.log("flagValid = ", flagValid);
           return false;
@@ -121,7 +140,6 @@ class Sudoku {
 
   // Check row
   isValidSudoku(row, col, num) {
-    // console.log("Enter rowValidation method");
     const rowMap = new Map();
     for (let i = 0; i < this.grid.length; i++) {
       if (this.grid[row][i] === num) {
@@ -158,21 +176,28 @@ class Sudoku {
   }
 
   updateSudoku(num) {
-    // console.log(this.grid);
-    console.log("1");
-    let cell = globalVar.setCell.id;
-    this.grid[cell[0]][cell[1]] = Number(num);
-    globalVar.setCell.innerHTML = num;
-    globalVar.setCell.style.color = "blue";
-
-    globalVar.undoStack.unshift({ action: "addNum", id: globalVar.setCell.id });
-    globalVar.count = globalVar.count + 1;
+    if (globalVar.setCell !== undefined) {
+      let cell = globalVar.setCell.id;
+      this.grid[cell[0]][cell[1]] = Number(num);
+      globalVar.setCell.innerHTML = num;
+      globalVar.setCell.style.color = "blue";
+      globalVar.eraseStack.unshift({
+        id: cell,
+        value: Number(num),
+      });
+      globalVar.undoStack.unshift({
+        action: "addNum",
+        id: cell,
+        value: Number(num),
+      });
+      globalVar.count = globalVar.count + 1;
+    }
   }
 
   listenerButtonNumber() {
     for (let i = 0; i < numbersBtn.length; i++) {
       numbersBtn[i].addEventListener("click", function () {
-        sudoku.updateSudoku(numbersBtn[i].innerHTML);
+        sudoku.updateSudoku(numbersBtn[i].innerHTML, undefined);
       });
     }
   }
@@ -186,6 +211,7 @@ sudokuTable.addEventListener("click", sudoku.enterNumber);
 checkBtn.addEventListener("click", sudoku.checkGrid.bind(sudoku));
 undoBtn.addEventListener("click", sudoku.undo.bind(sudoku));
 eraseBtn.addEventListener("click", sudoku.erase);
+// notesBtn.addEventListener("click", sudoku.notes);
 
 // document
 //   .getElementById("check-btn")
