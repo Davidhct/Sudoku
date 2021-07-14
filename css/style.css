@@ -140,6 +140,36 @@ tr:nth-child(3n) td {
 .number:hover {
   background: rgb(201, 198, 198);
 }
+/* 
+.inner-table {
+  display: flex;
+  width: 49px;
+
+  font-size: 3px;
+ 
+  align-items: center;
+  
+  border-bottom: none;
+}
+/* .inner-tr {
+  border-bottom: white;
+  border: white;
+} */
+/*
+.inner-tr > td {
+  width: 15px;
+  height: 15px;
+  font-size: 8px;
+}
+.inner-tr:nth-child(1n) td {
+  border: none;
+}
+.inner-tr:nth-child(2n) td {
+  border: none;
+}
+.inner-tr:nth-child(3n) td {
+  border: none;
+} */
 
 @media only screen and (max-width: 768px) {
   body {
