@@ -25,11 +25,14 @@ const globalVar = {
   nums: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   setCell: undefined,
   undoStack: [],
-  // noteStack: [],
+  noteStack: [],
+  ////
+  undoNoteStack: [],
+  ////
   count: 0,
   cellCount: true,
   totalNumCell: 81,
-  noteFlag: true,
+  noteFlag: false,
 };
 
 const numbersBtn = document.getElementsByClassName("number");
@@ -88,43 +91,59 @@ class Sudoku {
     document.getElementById(cell.id).innerHTML = "";
   }
 
-  // notes() {
-  //   if (globalVar.noteFlag === true) {
-  //     this.src = "./css/images/notes_on_icon.png";
-  //     // sudoku.updateSudoku(undefined, "notes");
-  //     ///
-  //     console.log(globalVar.setCell);
-  //     let cell = globalVar.setCell;
-  //     const html = `
-  //           <table class="inner-table">
-  //             <tbody>
-  //               <tr class="inner-tr ${cell.id}0">
-  //                 <td id="${cell.id}1"></td>
-  //                 <td id="${cell.id}2"></td>
-  //                 <td id="${cell.id}3"></td>
-  //               </tr>
-  //               <tr class="inner-tr ${cell.id}0">
-  //                 <td id="${cell.id}4"></td>
-  //                 <td id="${cell.id}5"></td>
-  //                 <td id="${cell.id}6"></td>
-  //               </tr>
-  //               <tr class="inner-tr ${cell.id}0">
-  //                 <td id="${cell.id}7"></td>
-  //                 <td id="${cell.id}8"></td>
-  //                 <td id="${cell.id}9"></td>
-  //               </tr>
-  //             </tbody>
-  //           </table>
-  //     `;
-  //     document.getElementById(cell.id).insertAdjacentHTML("afterbegin", html);
+  notes() {
+    if (globalVar.setCell !== undefined || globalVar.setCell !== null) {
+      globalVar.noteFlag = !globalVar.noteFlag;
+      if (globalVar.noteFlag === true) {
+        this.src = "./css/images/notes_on_icon.png";
 
-  //     ///
-  //     globalVar.noteFlag = false;
-  //   } else {
-  //     this.src = "./css/images/notes_off_icon.png";
-  //     globalVar.noteFlag = true;
-  //   }
-  // }
+        if (globalVar.setCell.innerHTML !== "") {
+          sudoku.erase();
+        }
+
+        // sudoku.updateSudoku(undefined, "notes");
+        ///
+        console.log(globalVar.setCell);
+
+        sudoku.renderNote(globalVar.setCell);
+
+        ///
+      } else {
+        this.src = "./css/images/notes_off_icon.png";
+        document.querySelector(".inner-table").remove();
+        globalVar.undoStack.unshift({
+          action: "noteNum",
+          id: globalVar.setCell.id,
+          value: globalVar.undoNoteStack,
+        });
+      }
+    }
+  }
+
+  renderNote(cell) {
+    const html = `
+            <table class="inner-table">
+              <tbody>
+                <tr class="inner-tr ${cell.id}0">
+                  <td id="${cell.id}1"></td>
+                  <td id="${cell.id}2"></td>
+                  <td id="${cell.id}3"></td>
+                </tr>
+                <tr class="inner-tr ${cell.id}0">
+                  <td id="${cell.id}4"></td>
+                  <td id="${cell.id}5"></td>
+                  <td id="${cell.id}6"></td>
+                </tr>
+                <tr class="inner-tr ${cell.id}0">
+                  <td id="${cell.id}7"></td>
+                  <td id="${cell.id}8"></td>
+                  <td id="${cell.id}9"></td>
+                </tr>
+              </tbody>
+            </table>
+      `;
+    document.getElementById(cell.id).insertAdjacentHTML("afterbegin", html);
+  }
   undo() {
     if (globalVar.undoStack.length > 0) {
       const cell = globalVar.undoStack.shift();
@@ -135,6 +154,13 @@ class Sudoku {
           break;
         case "eraseNum":
           document.getElementById(cell.id).innerHTML = cell.value;
+          break;
+        case "noteNum":
+          sudoku.renderNote(cell);
+          const noteCell = cell.value.shift();
+          console.log(noteCell);
+
+          // document.getElementById(cell.id).innerHTML = cell.value;
           break;
       }
     }
@@ -196,7 +222,7 @@ class Sudoku {
   }
 
   updateSudoku(num) {
-    if (globalVar.setCell !== undefined) {
+    if (globalVar.setCell !== undefined && globalVar.noteFlag != true) {
       let cell = globalVar.setCell.id;
       this.grid[cell[0]][cell[1]] = Number(num);
       globalVar.setCell.innerHTML = num;
@@ -213,11 +239,40 @@ class Sudoku {
       globalVar.count = globalVar.count + 1;
     }
   }
+  updateNoteTable(num) {
+    if (globalVar.setCell !== undefined || globalVar.setCell !== null) {
+      let innerNote = document.getElementById(`${globalVar.setCell.id}${num}`);
+      if (innerNote === null) {
+        sudoku.renderNote(globalVar.setCell);
+        innerNote = document.getElementById(`${globalVar.setCell.id}${num}`);
+      }
+
+      console.log(innerNote.innerHTML);
+      if (innerNote.innerHTML === num) {
+        innerNote.innerHTML = "";
+
+        globalVar.undoNoteStack.unshift({
+          action: "eraseNumNote",
+          id: innerNote.id,
+          value: Number(num),
+        });
+      } else {
+        innerNote.innerHTML = Number(num);
+
+        globalVar.undoNoteStack.unshift({
+          action: "addNumNote",
+          id: innerNote.id,
+          value: Number(num),
+        });
+      }
+    }
+  }
 
   listenerButtonNumber() {
     for (let i = 0; i < numbersBtn.length; i++) {
       numbersBtn[i].addEventListener("click", function () {
-        sudoku.updateSudoku(numbersBtn[i].innerHTML);
+        if (globalVar.noteFlag) sudoku.updateNoteTable(numbersBtn[i].innerHTML);
+        else sudoku.updateSudoku(numbersBtn[i].innerHTML);
       });
     }
   }
