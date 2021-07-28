@@ -33,6 +33,7 @@ const globalVar = {
   cellCount: true,
   totalNumCell: 81,
   noteFlag: false,
+  flag: true,
 };
 
 const numbersBtn = document.getElementsByClassName("number");
@@ -62,23 +63,33 @@ class Sudoku {
   enterNumber(e) {
     let cell = e.target;
     console.log(cell.id.length);
-    if (cell.id.length > 2 && !globalVar.noteFlag) {
-      let val = document.getElementById(`.table-${cell.id}`);
-      if (val !== null) val.remove();
+    if (cell.id.length === 3) {
+      // let val = document.getElementById(`.table-${cell.id}`);
+      // console.log(val);
+      // if (val !== null && !globalVar.noteFlag) {
+      //   console.log(val);
+      //   val.remove();
+      // }
       let row = cell.id[0];
       let col = cell.id[1];
       cell.id = `${row}${col}`;
+      console.log(cell.id);
     }
-    if (Number(cell.innerHTML) === 0 || cell.style.color === "blue") {
-      if (globalVar.noteFlag) {
-        console.log(cell.id);
-        let val = document.getElementById(cell.id);
-        if (val.innerHTML !== "") val.innerHTML = "";
+    if (cell.id.length === 2) {
+      if (Number(cell.innerHTML) === 0 || cell.style.color === "blue") {
+        console.log(cell.id, "..........", globalVar.noteFlag);
+        if (globalVar.noteFlag) {
+          console.log(cell.id);
+          // let val = document.getElementById(cell.id);
+          // console.log(val);
+          // if (val.innerHTML !== "") val.innerHTML = "";
+        }
+        const tmp = cell.id;
+        globalVar.setCell = document.getElementById(tmp);
+        if (globalVar.count === globalVar.totalNumCell)
+          checkBtn.disabled = false;
+        else checkBtn.disabled = true;
       }
-      const tmp = cell.id;
-      globalVar.setCell = document.getElementById(tmp);
-      if (globalVar.count === globalVar.totalNumCell) checkBtn.disabled = false;
-      else checkBtn.disabled = true;
     }
   }
 
@@ -121,6 +132,7 @@ class Sudoku {
       ///
     } else {
       this.src = "./css/images/notes_off_icon.png";
+      globalVar.flag = true;
     }
   }
 
@@ -255,12 +267,20 @@ class Sudoku {
   updateNoteTable(num) {
     if (globalVar.setCell !== undefined) {
       let innerNote = document.getElementById(`${globalVar.setCell.id}${num}`);
+      console.log(innerNote);
+      let tmph = document.getElementById(`${globalVar.setCell.id}`);
+      console.log(tmph.innerText === "");
       if (innerNote === null) {
-        sudoku.renderNote(globalVar.setCell.id);
+        // if (globalVar.setCell.id.length === 2) {
+        if (tmph.innerText === "") sudoku.renderNote(globalVar.setCell.id);
+        // }
+        //////////
+
         innerNote = document.getElementById(`${globalVar.setCell.id}${num}`);
+        console.log(`${globalVar.setCell.id}${num}`);
+        console.log(document.getElementById(`${globalVar.setCell.id}${num}`));
       }
 
-      console.log(innerNote.innerHTML);
       if (innerNote.innerHTML === num) {
         innerNote.innerHTML = "";
 
