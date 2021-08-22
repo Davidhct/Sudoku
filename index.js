@@ -56,6 +56,7 @@ const globalVar = {
   totalNumCell: 81,
   noteFlag: false,
   isRandom: true,
+  counter: 0,
 };
 
 const numbersBtn = document.getElementsByClassName("number");
@@ -349,44 +350,6 @@ class Sudoku {
       });
     }
   }
-  findEmptysquare() {
-    for (let i = 0; i < this.grid.length; i++) {
-      for (let j = 0; j < this.grid.length; j++) {
-        if (this.grid[i][j] === 0) return [i, j];
-      }
-    }
-    checkBtn.disabled = false;
-    globalVar.isRandom = true;
-    return false;
-  }
-
-  solver() {
-    let row, col;
-
-    const find = sudoku.findEmptysquare();
-    if (find === false) {
-      // checkBtn.disabled = false;
-      return true;
-    } else [row, col] = [...find];
-    // console.log(this.grid);
-
-    for (let i = 1; i < 10; i++) {
-      // console.log(sudoku.isValidSudoku(row, col, i));
-      if (sudoku.isValidSudoku(row, col, i, false)) {
-        // console.log(row, col);
-        this.grid[row][col] = i;
-
-        if (sudoku.solver()) {
-          // console.log(count++);
-          sudoku.displayGrid();
-          return true;
-        }
-
-        this.grid[row][col] = 0;
-      }
-    }
-    return false;
-  }
 
   sattoloCycleShuffle() {
     for (var i = globalVar.nums.length; i-- > 1; ) {
@@ -397,7 +360,7 @@ class Sudoku {
     }
   }
 
-  generator() {
+  fullBoardGenerator() {
     if (globalVar.isRandom) {
       sudoku.resetGrid();
     }
@@ -406,6 +369,7 @@ class Sudoku {
     const find = sudoku.findEmptysquare();
     if (find === false) {
       // checkBtn.disabled = false;
+      sudoku.sudokuGenerator();
       return true;
     } else [row, col] = [...find];
 
@@ -416,9 +380,9 @@ class Sudoku {
         // console.log(row, col);
         this.grid[row][col] = num;
 
-        if (sudoku.generator()) {
-          // console.log(count++);
-          sudoku.displayGrid();
+        if (sudoku.fullBoardGenerator()) {
+          // console.log(count2++);
+          // sudoku.displayGrid();
 
           return true;
         }
@@ -428,6 +392,92 @@ class Sudoku {
     }
     return false;
   }
+
+  sudokuGenerator() {
+    let attempts = 1;
+    globalVar.counter = 1;
+    let row,
+      col,
+      backUpVal,
+      copyGrid = 0;
+    while (attempts > 0) {
+      row = Math.floor(Math.random() * 8) + 1;
+      col = Math.floor(Math.random() * 8) + 1;
+      while (this.grid[row][col] === 0) {
+        row = Math.floor(Math.random() * 8) + 1;
+        col = Math.floor(Math.random() * 8) + 1;
+      }
+      // console.log(row, ", ", col);
+      backUpVal = this.grid[row][col];
+      this.grid[row][col] = 0;
+
+      copyGrid = this.grid.slice();
+      // console.log(copyGrid);
+      globalVar.counter = 0;
+      sudoku.solver(copyGrid);
+      console.log(globalVar.counter);
+      if (globalVar.counter !== 1) {
+        this.grid[row][col] = backUpVal;
+        attempts -= 1;
+      }
+      sudoku.displayGrid();
+    }
+  }
+  checkFullGrid(board) {
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board.length; j++) {
+        if (board[i][j] === 0) return false;
+      }
+    }
+
+    return true;
+  }
+  findEmptysquare() {
+    for (let i = 0; i < this.grid.length; i++) {
+      for (let j = 0; j < this.grid.length; j++) {
+        if (this.grid[i][j] === 0) return [i, j];
+      }
+    }
+    // checkBtn.disabled = false;
+    globalVar.isRandom = true;
+
+    return false;
+  }
+
+  solver(grid = undefined) {
+    let row, col, board;
+    board = grid === undefined ? (board = this.grid) : grid;
+    // console.log(board);
+    const find = sudoku.findEmptysquare();
+    if (find === false) {
+      // checkBtn.disabled = false;
+
+      return true;
+    } else [row, col] = [...find];
+    // console.log(this.grid);
+
+    for (let i = 1; i < 10; i++) {
+      // console.log(sudoku.isValidSudoku(row, col, i));
+      if (sudoku.isValidSudoku(row, col, i, false)) {
+        // console.log(row, col);
+        board[row][col] = i;
+        if (sudoku.checkFullGrid(board)) {
+          globalVar.counter += 1;
+          break;
+        } else {
+          if (sudoku.solver()) {
+            // console.log(count++);
+
+            sudoku.displayGrid();
+            return true;
+          }
+        }
+      }
+    }
+    board[row][col] = 0;
+    return false;
+  }
+
   resetGrid() {
     console.log("click");
     globalVar.isRandom = false;
@@ -436,12 +486,12 @@ class Sudoku {
         this.grid[i][j] = 0;
       }
     }
-    console.log(this.grid);
+    // console.log(this.grid);
     // globalVar.grid = grid3;
     sudoku.displayGrid();
   }
 }
-let count = 0;
+let count2 = 0;
 const sudoku = new Sudoku();
 sudoku.isComplete();
 
@@ -452,7 +502,7 @@ undoBtn.addEventListener("click", sudoku.undo.bind(sudoku));
 eraseBtn.addEventListener("click", sudoku.erase);
 notesBtn.addEventListener("click", sudoku.notes);
 solveBtn.addEventListener("click", sudoku.solver.bind(sudoku));
-randomBtn.addEventListener("click", sudoku.generator.bind(sudoku));
+randomBtn.addEventListener("click", sudoku.fullBoardGenerator.bind(sudoku));
 sudoku.displayGrid();
 
 onload = () => {
