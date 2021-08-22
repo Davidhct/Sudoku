@@ -57,6 +57,7 @@ const globalVar = {
   noteFlag: false,
   isRandom: true,
   counter: 0,
+  boardSolve: [],
 };
 
 const numbersBtn = document.getElementsByClassName("number");
@@ -111,21 +112,21 @@ class Sudoku {
         }
         const tmp = cell.id;
         globalVar.setCell = document.getElementById(tmp);
-        if (globalVar.count === globalVar.totalNumCell)
-          checkBtn.disabled = false;
+        console.log(sudoku.grid);
+        if (sudoku.checkFullGrid(sudoku.grid)) checkBtn.disabled = false;
         else checkBtn.disabled = true;
       }
     }
   }
 
-  isComplete() {
-    let count = 0;
-    for (let i = 0; i < this.grid.length; i++)
-      for (let j = 0; j < this.grid.length; j++)
-        if (this.grid[i][j] !== 0) count++;
+  // isComplete() {
+  //   let count = 0;
+  //   for (let i = 0; i < this.grid.length; i++)
+  //     for (let j = 0; j < this.grid.length; j++)
+  //       if (this.grid[i][j] !== 0) count++;
 
-    globalVar.count = globalVar.totalNumCell - count;
-  }
+  //   globalVar.count = globalVar.totalNumCell - count;
+  // }
 
   erase() {
     console.log(globalVar.setCell);
@@ -298,6 +299,7 @@ class Sudoku {
         value: Number(num),
       });
       globalVar.count = globalVar.count + 1;
+      if (sudoku.checkFullGrid(sudoku.grid)) checkBtn.disabled = false;
     }
   }
   updateNoteTable(num) {
@@ -351,6 +353,20 @@ class Sudoku {
     }
   }
 
+  findEmptysquare() {
+    for (let i = 0; i < this.grid.length; i++) {
+      for (let j = 0; j < this.grid.length; j++) {
+        if (this.grid[i][j] === 0) return [i, j];
+      }
+    }
+    // checkBtn.disabled = false;
+    globalVar.isRandom = true;
+
+    sudoku.displayGrid();
+
+    return false;
+  }
+
   sattoloCycleShuffle() {
     for (var i = globalVar.nums.length; i-- > 1; ) {
       var j = Math.floor(Math.random() * i);
@@ -369,6 +385,7 @@ class Sudoku {
     const find = sudoku.findEmptysquare();
     if (find === false) {
       // checkBtn.disabled = false;
+      globalVar.boardSolve = this.grid;
       sudoku.sudokuGenerator();
       return true;
     } else [row, col] = [...find];
@@ -382,7 +399,7 @@ class Sudoku {
 
         if (sudoku.fullBoardGenerator()) {
           // console.log(count2++);
-          // sudoku.displayGrid();
+          sudoku.displayGrid();
 
           return true;
         }
@@ -394,7 +411,7 @@ class Sudoku {
   }
 
   sudokuGenerator() {
-    let attempts = 1;
+    let attempts = 3;
     globalVar.counter = 1;
     let row,
       col,
@@ -415,12 +432,12 @@ class Sudoku {
       // console.log(copyGrid);
       globalVar.counter = 0;
       sudoku.solver(copyGrid);
-      console.log(globalVar.counter);
+      // console.log(globalVar.counter);
       if (globalVar.counter !== 1) {
         this.grid[row][col] = backUpVal;
         attempts -= 1;
       }
-      sudoku.displayGrid();
+      // sudoku.displayGrid();
     }
   }
   checkFullGrid(board) {
@@ -431,17 +448,6 @@ class Sudoku {
     }
 
     return true;
-  }
-  findEmptysquare() {
-    for (let i = 0; i < this.grid.length; i++) {
-      for (let j = 0; j < this.grid.length; j++) {
-        if (this.grid[i][j] === 0) return [i, j];
-      }
-    }
-    // checkBtn.disabled = false;
-    globalVar.isRandom = true;
-
-    return false;
   }
 
   solver(grid = undefined) {
@@ -475,6 +481,32 @@ class Sudoku {
       }
     }
     board[row][col] = 0;
+    this.grid = board;
+    return false;
+  }
+
+  solve() {
+    // sudoku.displayGrid();
+
+    let row, col;
+    // console.log(this.grid);
+    const find = sudoku.findEmptysquare();
+    if (find === false) {
+      checkBtn.disabled = false;
+      return true;
+    } else [row, col] = [...find];
+    for (let i = 1; i < 10; i++) {
+      // console.log(sudoku.isValidSudoku(row, col, i));
+      if (sudoku.isValidSudoku(row, col, i, false)) {
+        // console.log(row, col);
+        this.grid[row][col] = i;
+        if (sudoku.solve()) {
+          // console.log(count2++);
+          return true;
+        }
+        this.grid[row][col] = 0;
+      }
+    }
     return false;
   }
 
@@ -488,12 +520,12 @@ class Sudoku {
     }
     // console.log(this.grid);
     // globalVar.grid = grid3;
-    sudoku.displayGrid();
+    // sudoku.displayGrid();
   }
 }
 let count2 = 0;
 const sudoku = new Sudoku();
-sudoku.isComplete();
+// sudoku.isComplete();
 
 sudoku.listenerButtonNumber();
 sudokuTable.addEventListener("click", sudoku.enterNumber);
@@ -501,10 +533,11 @@ checkBtn.addEventListener("click", sudoku.checkGrid.bind(sudoku));
 undoBtn.addEventListener("click", sudoku.undo.bind(sudoku));
 eraseBtn.addEventListener("click", sudoku.erase);
 notesBtn.addEventListener("click", sudoku.notes);
-solveBtn.addEventListener("click", sudoku.solver.bind(sudoku));
+solveBtn.addEventListener("click", sudoku.solve.bind(sudoku));
 randomBtn.addEventListener("click", sudoku.fullBoardGenerator.bind(sudoku));
-sudoku.displayGrid();
+// sudoku.displayGrid();
 
 onload = () => {
   if (sudoku.findEmptysquare() === false) checkBtn.disabled = false;
+  sudoku.fullBoardGenerator();
 };
