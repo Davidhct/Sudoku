@@ -1,37 +1,4 @@
-let grid2 = [
-  [4, 0, 0, 0, 0, 5, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 1, 9, 8],
-  [3, 0, 0, 0, 8, 2, 4, 0, 0],
-  [0, 0, 0, 1, 0, 0, 0, 8, 0],
-  [9, 0, 3, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 3, 0, 6, 7, 0],
-  [0, 5, 0, 0, 0, 9, 0, 0, 0],
-  [0, 0, 0, 2, 0, 0, 9, 0, 7],
-  [6, 4, 0, 3, 0, 0, 0, 0, 0],
-];
-let grid1 = [
-  [8, 9, 5, 7, 4, 2, 1, 3, 6],
-  [2, 7, 1, 9, 6, 3, 4, 8, 5],
-  [4, 6, 3, 5, 8, 1, 7, 9, 2],
-  [9, 3, 4, 6, 1, 7, 2, 5, 8],
-  [5, 1, 7, 2, 0, 8, 9, 6, 4],
-  [6, 8, 2, 4, 5, 9, 3, 7, 1],
-  [1, 5, 9, 8, 7, 4, 6, 2, 3],
-  [7, 4, 6, 3, 2, 5, 8, 1, 9],
-  [3, 2, 8, 1, 9, 6, 5, 4, 7],
-];
-let grid3 = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
-let grid4 = [
+let grid = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -43,7 +10,7 @@ let grid4 = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 const globalVar = {
-  grid: grid3,
+  grid: grid,
   nums: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   setCell: undefined,
   undoStack: [],
@@ -58,6 +25,7 @@ const globalVar = {
   isRandom: true,
   counter: 0,
   boardSolve: [],
+  countNumber: new Map(),
 };
 
 const numbersBtn = document.getElementsByClassName("number");
@@ -137,7 +105,14 @@ class Sudoku {
       id: cell.id,
       value: cell.innerHTML,
     });
-
+    if (!globalVar.noteFlag) {
+      console.log("clivk");
+      sudoku.turnOffUnusedButtons(
+        "erase",
+        Number(cell.id[0]),
+        Number(cell.id[1])
+      );
+    }
     document.getElementById(cell.id).innerHTML = "";
   }
 
@@ -193,9 +168,19 @@ class Sudoku {
       switch (cell.action) {
         case "addNum":
           document.getElementById(cell.id).innerHTML = "";
+          sudoku.turnOffUnusedButtons(
+            "erase",
+            Number(cell.id[0]),
+            Number(cell.id[1])
+          );
           break;
         case "eraseNum":
           document.getElementById(cell.id).innerHTML = cell.value;
+          sudoku.turnOffUnusedButtons(
+            "updateSudoku",
+            Number(cell.id[0]),
+            Number(cell.id[1])
+          );
           break;
         case "noteNum":
           // sudoku.innerUndo(cell);
@@ -300,6 +285,11 @@ class Sudoku {
       });
       globalVar.count = globalVar.count + 1;
       if (sudoku.checkFullGrid(sudoku.grid)) checkBtn.disabled = false;
+      sudoku.turnOffUnusedButtons(
+        "updateSudoku",
+        Number(cell[0]),
+        Number(cell[1])
+      );
     }
   }
   updateNoteTable(num) {
@@ -516,11 +506,50 @@ class Sudoku {
     for (let i = 0; i < this.grid.length; i++) {
       for (let j = 0; j < this.grid.length; j++) {
         this.grid[i][j] = 0;
+        document.getElementById(`${i}${j}`).style.color = "black";
       }
     }
-    // console.log(this.grid);
-    // globalVar.grid = grid3;
-    // sudoku.displayGrid();
+  }
+  disabledButton(cnt, num) {
+    let numBtn = document.getElementById(`btn-${num}`);
+    if (cnt === 9) {
+      console.log(cnt, num);
+      numBtn.disabled = true;
+      numBtn.style.cursor = "not-allowed";
+    } else {
+      numBtn.disabled = false;
+      numBtn.style.cursor = "pointer";
+    }
+  }
+
+  turnOffUnusedButtons(funcFrom = undefined, row = undefined, col = undefined) {
+    let tmpVal = 1;
+
+    if (row !== undefined && col !== undefined) {
+      tmpVal = globalVar.countNumber.get(this.grid[row][col]);
+
+      if (funcFrom === "updateSudoku") tmpVal += 1;
+      else if (funcFrom === "erase") tmpVal -= 1;
+      sudoku.disabledButton(tmpVal, this.grid[row][col]);
+
+      globalVar.countNumber.set(this.grid[row][col], tmpVal);
+    } else {
+      for (let i = 0; i < this.grid.length; i++) {
+        for (let j = 0; j < this.grid.length; j++) {
+          if (this.grid[i][j] !== 0) {
+            tmpVal = globalVar.countNumber.get(this.grid[i][j]);
+            if (!isNaN(tmpVal)) {
+              tmpVal += 1;
+              sudoku.disabledButton(tmpVal, this.grid[i][j]);
+
+              globalVar.countNumber.set(this.grid[i][j], tmpVal);
+            } else {
+              globalVar.countNumber.set(this.grid[i][j], 1);
+            }
+          }
+        }
+      }
+    }
   }
 }
 let count2 = 0;
@@ -540,4 +569,5 @@ randomBtn.addEventListener("click", sudoku.fullBoardGenerator.bind(sudoku));
 onload = () => {
   if (sudoku.findEmptysquare() === false) checkBtn.disabled = false;
   sudoku.fullBoardGenerator();
+  sudoku.turnOffUnusedButtons();
 };
