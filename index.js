@@ -26,6 +26,7 @@ const globalVar = {
   counter: 0,
   boardSolve: [],
   countNumber: new Map(),
+  hintBoard: undefined,
 };
 
 const numbersBtn = document.getElementsByClassName("number");
@@ -36,7 +37,7 @@ const eraseBtn = document.getElementById("erase-btn");
 const notesBtn = document.getElementById("notes-btn");
 const solveBtn = document.getElementById("solveBtn");
 const randomBtn = document.getElementById("randomBtn");
-// const hintBtn = document.getElementById("hint-btn");
+const hintBtn = document.getElementById("hint-btn");
 
 class Sudoku {
   constructor() {
@@ -199,6 +200,30 @@ class Sudoku {
           break;
       }
     }
+  }
+
+  hint() {
+    let min = globalVar.countNumber.get(1);
+    let keyHint;
+    console.log(globalVar.countNumber);
+    console.log(min);
+    for (let i = 1; i <= globalVar.countNumber.size; i++) {
+      if (globalVar.countNumber.get(i) < min) {
+        min = globalVar.countNumber.get(i);
+      }
+    }
+    for (const [key, value] of globalVar.countNumber.entries()) {
+      if (value === min) {
+        keyHint = key;
+        break;
+      }
+    }
+
+    console.log(keyHint, ">>>", min);
+    globalVar.hintBoard = [...sudoku.grid];
+    sudoku.solve("hint");
+    console.log(globalVar.hintBoard);
+    console.log(sudoku.grid);
   }
 
   checkGrid() {
@@ -475,10 +500,11 @@ class Sudoku {
     return false;
   }
 
-  solve() {
+  solve(from = undefined) {
     // sudoku.displayGrid();
 
-    let row, col;
+    let row, col, board;
+    board = from === "hint" ? (board = globalVar.hintBoard) : grid;
     // console.log(this.grid);
     const find = sudoku.findEmptysquare();
     if (find === false) {
@@ -489,12 +515,12 @@ class Sudoku {
       // console.log(sudoku.isValidSudoku(row, col, i));
       if (sudoku.isValidSudoku(row, col, i, false)) {
         // console.log(row, col);
-        this.grid[row][col] = i;
+        board[row][col] = i;
         if (sudoku.solve()) {
           // console.log(count2++);
           return true;
         }
-        this.grid[row][col] = 0;
+        board[row][col] = 0;
       }
     }
     return false;
@@ -564,6 +590,7 @@ eraseBtn.addEventListener("click", sudoku.erase);
 notesBtn.addEventListener("click", sudoku.notes);
 solveBtn.addEventListener("click", sudoku.solve.bind(sudoku));
 randomBtn.addEventListener("click", sudoku.fullBoardGenerator.bind(sudoku));
+hintBtn.addEventListener("click", sudoku.hint);
 // sudoku.displayGrid();
 
 onload = () => {
